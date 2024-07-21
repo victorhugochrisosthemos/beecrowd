@@ -1,0 +1,5 @@
+num = int(input())
+hor = int(input())
+valorHoras = round(float(input()), 2)
+print("NUMBER = " + str(num))
+print("SALARY = U$ {:.2f}".format(hor*valorHoras))
