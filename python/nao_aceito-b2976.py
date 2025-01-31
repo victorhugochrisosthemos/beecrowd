@@ -1,42 +1,50 @@
 from itertools import combinations
 
-def max_non_consecutive_triangle_subsequence(arr):
-    n = len(arr)
-    max_len = 0
+n = int(input())
+if (n >= 1 and n <= 100000):
+    
+    teste = [int(input()) for _ in range(n)]
 
-    for size in range(3, n + 1):
-        for subset in combinations(arr, size):
-            valid = all(sorted(triple)[0] + sorted(triple)[1] > sorted(triple)[2]
-                        for triple in combinations(subset, 3))
-            if valid:
-                max_len = max(max_len, len(subset))
-    return max_len
-
-
-def max_consecutive_triangle_subsequence(arr):
-    max_len = 0
-    current_len = 0
-
-    for i in range(len(arr) - 2):
-        a, b, c = sorted(arr[i:i + 3])  
-        if a + b > c:  
-            current_len += 1 if current_len else 3  
+    
+    #teste = [60, 30, 20, 40, 60]
+    
+    original = teste[:]
+    
+    #print("Original:")
+    #print(original)
+    
+    # Remove duplicados e ordena para o conjunto dos não consecutivos
+    teste = sorted(set(teste))
+    
+    #print("Únicos:")
+    #print(teste)
+    
+    # Conjunto dos não consecutivos
+    max_unicos = 0
+    
+    # Gera todas as combinações possíveis de 3 elementos distintos
+    for a, b, c in combinations(teste, 3):
+        if a + b > c and a + c > b and b + c > a:
+            max_unicos = max(max_unicos, 3)
+    
+    # Conjunto dos consecutivos
+    max_consecutivos = 0
+    atual_consecutivo = 0
+    
+    for i in range(len(original) - 2):
+        a, b, c = original[i], original[i + 1], original[i + 2]
+        if a + b > c:
+            atual_consecutivo = atual_consecutivo + 1 if max_consecutivos > 0 else 3
+            max_consecutivos = max(max_consecutivos, atual_consecutivo)
         else:
-            max_len = max(max_len, current_len)
-            current_len = 0
-
-    max_len = max(max_len, current_len)
-    return max_len
-
-def main():
-    n = int(input())
-    arr = [int(input()) for _ in range(n)]
-
-    max_consecutive = max_consecutive_triangle_subsequence(arr)
-    max_non_consecutive = max_non_consecutive_triangle_subsequence(arr)
-
-    print(max_consecutive)
-    print(max_non_consecutive)
-
-main()
-
+            atual_consecutivo = 0
+    
+    # Ajustar para zero caso não tenha subsequências válidas
+    max_consecutivos = max_consecutivos if max_consecutivos >= 3 else 0
+    max_unicos = max_unicos if max_unicos >= 3 else 0
+    
+    #print("Não consecutivos:", max_unicos)
+        #print("Consecutivos:", max_consecutivos)
+        
+    print(max_unicos)
+    print(max_consecutivos)
